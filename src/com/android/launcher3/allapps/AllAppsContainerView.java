@@ -458,8 +458,8 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
         background.getPadding(bgPadding);
         //mContainerView.setBackground(background);
         //mRevealView.setBackground(background.getConstantState().newDrawable());
-        mContainerView.setBackgroundResource(Color.TRANSPARENT);
-        mRevealView.setBackgroundResource(Color.TRANSPARENT);
+        mContainerView.setBackgroundColor(Color.TRANSPARENT);
+        mRevealView.setBackgroundColor(Color.TRANSPARENT);
         mAppsRecyclerView.updateBackgroundPadding(bgPadding);
         mAdapter.updateBackgroundPadding(bgPadding);
 
