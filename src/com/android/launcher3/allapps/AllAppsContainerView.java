@@ -43,7 +43,6 @@ import android.widget.LinearLayout;
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.BaseContainerView;
 import com.android.launcher3.BaseRecyclerView;
-import com.android.launcher3.BlurUtils;
 import com.android.launcher3.CellLayout;
 import com.android.launcher3.DeleteDropTarget;
 import com.android.launcher3.DeviceProfile;
