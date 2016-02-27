@@ -19,15 +19,22 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.method.TextKeyListener;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.app.WallpaperManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -36,6 +43,7 @@ import android.widget.LinearLayout;
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.BaseContainerView;
 import com.android.launcher3.BaseRecyclerView;
+import com.android.launcher3.BlurUtils;
 import com.android.launcher3.CellLayout;
 import com.android.launcher3.DeleteDropTarget;
 import com.android.launcher3.DeviceProfile;
@@ -51,6 +59,7 @@ import com.android.launcher3.Workspace;
 import com.android.launcher3.settings.SettingsProvider;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.Thunk;
+import android.graphics.Color;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -88,6 +97,10 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
     private int mSectionStrategy = SECTION_STRATEGY_RAGGED;
     private int mGridTheme = GRID_THEME_DARK;
     private int mLastGridTheme = -1;
+
+    private static WallpaperManager wallpaperManager;
+
+    private static BlurUtils mBlurUtils;
 
     private int mSectionNamesMargin;
     private int mNumAppsPerRow;
@@ -388,6 +401,43 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
         }
     }
 
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = null;
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    private BitmapDrawable wallBlur(Context mContext, Rect padding) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        Bitmap bm1 = drawableToBitmap(wallpaperManager.getDrawable());
+    //BitmapDrawable bmOut = new BitmapDrawable(getResources(), gaussianBlur(Bitmap.createBitmap(bm1, 0, 0, metrics.widthPixels, bm1.getHeight())));
+        int width = metrics.widthPixels;        
+        if (width > bm1.getWidth()) {
+            width = bm1.getWidth();
+        }
+        int height = bm1.getHeight();
+        Bitmap bm2 = Bitmap.createBitmap(bm1, padding.left, padding.bottom, width-padding.top, height-padding.right);
+        Bitmap bmOut1 = Bitmap.createScaledBitmap(bm2, (width-padding.top)/20, (height-padding.right)/20, false);
+        mBlurUtils = new BlurUtils(mContext);
+        //bmOut1 = mBlurUtils.renderScriptBlur(bmOut1, 3);
+	BitmapDrawable bmOut = new BitmapDrawable(getResources(), mBlurUtils.renderScriptBlur(bmOut1, 3));
+        return bmOut;
+    }
+
+
     /**
      * Update the background and padding of the Apps view and children.  Instead of insetting the
      * container view, we inset the background and padding of the recycler view to allow for the
@@ -396,6 +446,7 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
     @Override
     protected void onUpdateBackgroundAndPaddings(Rect searchBarBounds, Rect padding) {
         boolean isRtl = Utilities.isRtl(getResources());
+        wallpaperManager = WallpaperManager.getInstance(mContext);
 
         // TODO: Use quantum_panel instead of quantum_panel_shape
         int bgRes = mGridTheme == GRID_THEME_DARK ? R.drawable.quantum_panel_shape_dark :
@@ -405,8 +456,10 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
                 padding.right, 0);
         Rect bgPadding = new Rect();
         background.getPadding(bgPadding);
-        mContainerView.setBackground(background);
-        mRevealView.setBackground(background.getConstantState().newDrawable());
+        //mContainerView.setBackground(background);
+        //mRevealView.setBackground(background.getConstantState().newDrawable());
+        mContainerView.setBackgroundResource(Color.TRANSPARENT);
+        mRevealView.setBackgroundResource(Color.TRANSPARENT);
         mAppsRecyclerView.updateBackgroundPadding(bgPadding);
         mAdapter.updateBackgroundPadding(bgPadding);
 
