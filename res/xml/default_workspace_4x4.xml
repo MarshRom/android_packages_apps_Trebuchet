@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+f<?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -191,6 +191,9 @@
         <favorite
             launcher:packageName="org.notphenom.swe.browser"
             launcher:className="org.notphenom.swe.browser.Main" />
+        <favorite
+            launcher:packageName="org.cyanogenmod.gello.browser"
+            launcher:className="com.android.browser.BrowserActivity" />
         <favorite
             launcher:packageName="com.android.browser"
             launcher:className="com.android.browser.BrowserActivity" />

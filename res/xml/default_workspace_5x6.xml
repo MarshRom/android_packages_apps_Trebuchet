@@ -192,6 +192,9 @@
             launcher:packageName="org.notphenom.swe.browser"
             launcher:className="org.notphenom.swe.browser.Main" />
         <favorite
+            launcher:packageName="org.cyanogenmod.gello.browser"
+            launcher:className="com.android.browser.BrowserActivity" />
+        <favorite
             launcher:packageName="com.android.browser"
             launcher:className="com.android.browser.BrowserActivity" />
         <favorite
