@@ -15,6 +15,7 @@ import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.AttributeSet;
 import android.view.View;
+import com.android.launcher3.R;
 
 /**
  * A custom view for presenting a dynamically blurred version of another view's content.
