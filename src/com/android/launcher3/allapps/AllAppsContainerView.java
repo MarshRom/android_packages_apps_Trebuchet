@@ -87,7 +87,6 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
 
     @Thunk View mContent;
     @Thunk View mContainerView;
-    private BlurringView mBlurringView;
     @Thunk View mRevealView;
     @Thunk AllAppsRecyclerView mAppsRecyclerView;
     @Thunk AllAppsSearchBarController mSearchBarController;
@@ -325,6 +324,9 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
             mSearchBarController.focusSearchField();
         }
     }
+    
+    private BlurringView mBlurringView;
+
 
     @Override
     protected void onFinishInflate() {
@@ -350,7 +352,7 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
         View blurredView = findViewById(R.id.blurred_view);
         mContainerView.setOnFocusChangeListener(focusProxyListener);
         mRevealView = findViewById(R.id.all_apps_reveal);
-        blurringView.setBlurredView(blurredView);
+        mBlurringView.setBlurredView(blurredView);
 
         // Load the all apps recycler view
         mAppsRecyclerView = (AllAppsRecyclerView) findViewById(R.id.apps_list_view);
