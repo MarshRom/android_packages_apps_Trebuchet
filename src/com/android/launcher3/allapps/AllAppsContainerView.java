@@ -469,6 +469,7 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
             mSearchBarContainerView.requestLayout();
         }
 
+        mBlurringView.setBlurredView(blurredView);
         mBlurringView.invalidate();
     }
 
