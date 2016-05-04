@@ -144,10 +144,4 @@
         <attr name="dragView" format="reference" />
         <attr name="overlay" format="boolean"/>
     </declare-styleable>
-
-    <declare-styleable name="PxBlurringView">
-        <attr name="blurRadius" format="integer" />
-        <attr name="downsampleFactor" format="integer" />
-        <attr name="overlayColor" format="color" />
-    </declare-styleable>
 </resources>

@@ -53,14 +53,5 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:visibility="gone" />
-        <com.fivehundredpx.android.blur.BlurringView
-            android:id="@+id/blurring_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:blurRadius="11"
-            app:downsampleFactor="6"
-            app:overlayColor="#99FFFFFF"
-            android:visibility="gone" />
     </FrameLayout>
 </com.android.launcher3.allapps.AllAppsContainerView>
